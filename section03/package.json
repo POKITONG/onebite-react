@@ -6,5 +6,10 @@
   "scripts": {
     "start": "node src/index.js"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "randomcolor": "^0.6.2",
+    "_comment": "버전 앞의 ^는 버전 레인지로, 해당 0버전부터 1버전 까지의 버전 중 가장 최신 버전을 사용한다는 의미, 더 정확한 버전은 lock 파일에 명시",
+    "commander": "버전은 "
+  }
 }
