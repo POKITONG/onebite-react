@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "global": "^4.4.0",
-    "live-server": "^1.2.2"
+    "live-server": "^1.2.2",
+    "vite": "^5.4.5"
   }
 }
