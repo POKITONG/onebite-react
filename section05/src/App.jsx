@@ -1,14 +1,13 @@
 import './App.css'
-import Register from "./components/Register.jsx";
+import HookExam from "./components/HookExam.jsx";
 
 // vite 로 만든 react 프로젝트에서는 from 뒤의 확장자를 적지 않아도 되도록 내부적으로 자동 설정되어 있다.
-
 
 function App() {
 
     return (
         <>
-            <Register/>
+            <HookExam/>
         </>
     );
 }
