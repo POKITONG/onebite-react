@@ -1,0 +1,17 @@
+body {
+    padding: 20px;
+}
+.App {
+    margin: 0 auto;
+    /* 마진을 0 오토로 주게 되면 화면상에 남는 부분을 자동으로 마진을 설정한다.
+    -> 요소를 가운데에 배치되도록 도와줌*/
+    width: 400px;
+}
+
+.App > section {
+    background-color: rgb(245, 245, 245);
+    border: 1px solid rgb(240, 240, 240);
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 10px;
+}
