@@ -5,6 +5,7 @@ import Home from "./pages/Home.jsx";
 import New from "./pages/New.jsx";
 import Diary from "./pages/Diary.jsx";
 import Notfound from "./pages/Notfound.jsx";
+import {getEmotionImage} from "./util/get-emotion-image.js";
 
 // 1. "/" : 모든 일기를 조회하는 Home 페이지
 // 2. "/new" : 새로운 일기를 작성하는 New 페이지
@@ -21,8 +22,28 @@ function App() {
     // a 태그와 같이 링크가 필요한 경우 : Link 컴포넌트 사용
     // 이벤트 핸들러 함수 내에서 특정 조건에 따라서 페이지를 이동시켜야 하는 경우 : useNavigate 훅 사용
 
+
+    // public 과 assets 차이 :
+    // public : import 가 아닌 url 을 통해 로드 가능
+    // ex) <img src={"/emotion.png"} />
+    // assets : import 를 통해 로드 가능, 비트가 내부적으로 이미지 최적화 진행
+    // data URI : 이미지와 같은 외부 데이터들을 문자열 형태로 브라우저의 메모리에 캐싱하기 위해서 사용하는 포맷
+    // -> 새로고침 해도 다시는 불러오지 않도록 최적화 됨
+    // 일반적인 데이터를 사용해서 불러오는 이미지들은 새로고침 할 때마다 매번 다시 불러오게 됨
+    // -> 이미지가 만개, 십만개 등 굉장히 많이 필요한 상황에서는 public 폴더 내에 저장하는 것이 좋을 수 있다.
+
+    // Network : 리액트 앱이 주고받는 모든 네트워크 요청들을 모니터링하는 기능 제공
+
+
     return (
         <>
+            <div>
+                <img src={getEmotionImage(1)}/>
+                <img src={getEmotionImage(2)}/>
+                <img src={getEmotionImage(3)}/>
+                <img src={getEmotionImage(4)}/>
+                <img src={getEmotionImage(5)}/>
+            </div>
             <div>
                 <Link to={"/"}>Home</Link>
                 <Link to={"/new"}>New</Link>
@@ -42,6 +63,7 @@ function App() {
         // 1. Routes 컴포넌트 내부에는 Route 컴포넌트만 들어갈 수 있다.
         // 2. Routes 컴포넌트 외부 요소는 모든 페이지에 전부 렌더링 된다. (Header, Footer)
     );
+
 }
 
 export default App
