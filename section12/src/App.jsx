@@ -34,7 +34,8 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/new" element={<New/>}/>
-                <Route path="/diary" element={<Diary/>}/>
+                <Route path="/diary/:id" element={<Diary/>}/>
+                {/*/:id 를 통해 url 파라미터를 사용하는 경로임을 명시*/}
                 <Route path="*" element={<Notfound/>}/>
             </Routes>
         </>
