@@ -1,4 +1,4 @@
-import {useReducer, useState} from 'react'
+import {createContext, useReducer, useRef, useState} from 'react'
 import './App.css'
 import {Link, Route, Routes, useNavigate} from "react-router-dom";
 import Home from "./pages/Home.jsx";
@@ -15,7 +15,19 @@ import Edit from "./pages/Edit.jsx";
 // 3. "/diary" : 일기를 상세히 조회하는 Diary 페이지
 
 function reducer(state, action) {
-    return state;
+    switch (action.type) {
+        case "CREATE":
+            return [action.data, ...state];
+        case "UPDATE":
+            return state.map((item) => String(item.id) === String(action.data.id)
+                ? action.data
+                : item
+            );
+        case "DELETE":
+            return state.filter((item) => String(item.id) !== String(action.id));
+        default :
+            return state;
+    }
 }
 
 const mockData = [
@@ -33,13 +45,16 @@ const mockData = [
     },
 ]
 
+const DiaryStateContext = createContext();
+const DiaryDispatchContext = createContext();
+
 function App() {
-    const nav = useNavigate();
+/*    const nav = useNavigate();*/
     // useNavigate : 페이지를 실제로 이동시키는 네비게이트 함수를 반환해 줍니다.
 
-    const onClickButton = () => {
+/*    const onClickButton = () => {
         nav("/new");
-    };
+    };*/
 
     // a 태그와 같이 링크가 필요한 경우 : Link 컴포넌트 사용
     // 이벤트 핸들러 함수 내에서 특정 조건에 따라서 페이지를 이동시켜야 하는 경우 : useNavigate 훅 사용
@@ -61,23 +76,74 @@ function App() {
     }
 
     const [data, dispatch] = useReducer(reducer, mockData);
+    const idRef = useRef(3);
+
+    // 새로운 일기 추가
+    const onCreate = (createdDate, emotionId, content) => {
+        // 새로운 일기를 추가하는 기능
+        dispatch({
+            type: "CREATE",
+            data: {
+                id: idRef.current++,
+                createdDate,
+                emotionId,
+                content,
+            }
+        });
+    };
+
+    // 기존 일기 수정
+    const onUpdate = (id, createdDate, emotionId, content) => {
+        dispatch({
+            type: "UPDATE",
+            data: {
+                id, createdDate, emotionId, content,
+            }
+        })
+    };
+
+    // 기존 일기 삭제
+    const onDelete = (id) => {
+        dispatch({
+            type: "DELETE",
+            id
+        })
+    };
 
     return (
         <>
+            <button onClick={() => {
+                onCreate(new Date().getTime(), 1, "hello");
+            }}>일기 추가 테스트
+            </button>
+            <button onClick={() => {
+                onUpdate(1, new Date().getTime(), 3, "수정된 일기입니다.");
+            }}>일기 수정 테스트
+            </button>
+            <button onClick={() => {
+                onDelete(1);
+            }}>일기 삭제 테스트
+            </button>
             <Header title={"Header"}
                     leftChild={<Button text={"Left"}/>}
                     rightChild={<Button text={"Right"}/>}/>
-
-
             <Button/>
-            <Routes>
-                <Route path="/" element={<Home/>}/>
-                <Route path="/new" element={<New/>}/>
-                <Route path="/diary/:id" element={<Diary/>}/>
-                {/*/:id 를 통해 url 파라미터를 사용하는 경로임을 명시*/}
-                <Route path="/edit/:id" element={<Edit/>}/>
-                <Route path="*" element={<Notfound/>}/>
-            </Routes>
+            <DiaryDispatchContext.Provider value={{
+                onCreate, onDelete, onUpdate,
+            }}>
+                <DiaryStateContext.Provider value={data}>
+                    <Routes>
+                        <Route path="/" element={<Home/>}/>
+                        <Route path="/new" element={<New/>}/>
+                        <Route path="/diary/:id" element={<Diary/>}/>
+                        {/*/:id 를 통해 url 파라미터를 사용하는 경로임을 명시*/}
+                        <Route path="/edit/:id" element={<Edit/>}/>
+                        <Route path="*" element={<Notfound/>}/>
+                    </Routes>
+                </DiaryStateContext.Provider>
+            </DiaryDispatchContext.Provider>
+
+
         </>
         // 1. Routes 컴포넌트 내부에는 Route 컴포넌트만 들어갈 수 있다.
         // 2. Routes 컴포넌트 외부 요소는 모든 페이지에 전부 렌더링 된다. (Header, Footer)
