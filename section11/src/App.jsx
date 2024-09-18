@@ -1,4 +1,4 @@
-import {createContext, useCallback, useReducer, useRef, useState} from 'react'
+import {createContext, useCallback, useMemo, useReducer, useRef, useState} from 'react'
 import './App.css'
 import Header from "./components/Header.jsx";
 import Editor from "./components/Editor.jsx";
@@ -41,8 +41,11 @@ function reducer(state, action) {
     }
 }
 
-export const TodoContext = createContext();
+// export const TodoContext = createContext();
 // 리렌더링 할 때마다 새로운 Context 생성을 막기 위해 보통 컴포넌트 바깥에 선언한다.
+
+export const TodoStateContext = createContext();
+export const TodoDispatchContext = createContext();
 
 function App() {
 
@@ -75,16 +78,20 @@ function App() {
         })
     }, [])
 
+    const memoizedDispatch = useMemo(() => {
+        return {onCreate, onDelete, onUpdate};
+    }, []);
+
     return (
         <div className="App">
             <Header/>
-            <TodoContext.Provider value={{
-                todos, onCreate, onUpdate, onDelete,
-            }}>
-                <Editor/>
-                <List/>
-            </TodoContext.Provider>
-        {/* Provider 의 모든 자식 컴포넌트들은 value 의 값을 공급받을 수 있다.*/}
+            <TodoStateContext.Provider value={todos}>
+                <TodoDispatchContext.Provider value={memoizedDispatch}>
+                    <Editor/>
+                    <List/>
+                </TodoDispatchContext.Provider>
+            </TodoStateContext.Provider>
+            {/* Provider 의 모든 자식 컴포넌트들은 value 의 값을 공급받을 수 있다.*/}
         </div>
     );
 }
