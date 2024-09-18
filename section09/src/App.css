@@ -1,0 +1,10 @@
+.App {
+  width: 500px;
+  margin: 0 auto;
+
+  display: flex;
+  /*  App 요소 밑의 자식 요소들의 배치를 더 유연하게 설정*/
+  flex-direction: column;
+  gap: 10px;
+  /*  gap 설정은 display 가 flex 인 설정에만 적용 가능*/
+}
