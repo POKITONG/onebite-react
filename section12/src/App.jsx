@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useReducer, useState} from 'react'
 import './App.css'
 import {Link, Route, Routes, useNavigate} from "react-router-dom";
 import Home from "./pages/Home.jsx";
@@ -8,10 +8,30 @@ import Notfound from "./pages/Notfound.jsx";
 import {getEmotionImage} from "./util/get-emotion-image.js";
 import Button from "./components/Button.jsx";
 import Header from "./components/Header.jsx";
+import Edit from "./pages/Edit.jsx";
 
 // 1. "/" : 모든 일기를 조회하는 Home 페이지
 // 2. "/new" : 새로운 일기를 작성하는 New 페이지
 // 3. "/diary" : 일기를 상세히 조회하는 Diary 페이지
+
+function reducer(state, action) {
+    return state;
+}
+
+const mockData = [
+    {
+        id: 1,
+        createdDate: new Date().getTime(),
+        emotionId: 1,
+        content: "1번 일기 내용",
+    },
+    {
+        id: 2,
+        createdDate: new Date().getTime(),
+        emotionId: 2,
+        content: "2번 일기 내용",
+    },
+]
 
 function App() {
     const nav = useNavigate();
@@ -40,11 +60,13 @@ function App() {
                 페이지 이동시 a 태그와 다르게 새로고침이 되지 않는다.*/
     }
 
+    const [data, dispatch] = useReducer(reducer, mockData);
+
     return (
         <>
             <Header title={"Header"}
                     leftChild={<Button text={"Left"}/>}
-                    rightChild={<Button text={"Right"}/>} />
+                    rightChild={<Button text={"Right"}/>}/>
 
 
             <Button/>
@@ -53,13 +75,14 @@ function App() {
                 <Route path="/new" element={<New/>}/>
                 <Route path="/diary/:id" element={<Diary/>}/>
                 {/*/:id 를 통해 url 파라미터를 사용하는 경로임을 명시*/}
+                <Route path="/edit/:id" element={<Edit/>}/>
                 <Route path="*" element={<Notfound/>}/>
             </Routes>
-            </>
-            // 1. Routes 컴포넌트 내부에는 Route 컴포넌트만 들어갈 수 있다.
-            // 2. Routes 컴포넌트 외부 요소는 모든 페이지에 전부 렌더링 된다. (Header, Footer)
-            );
+        </>
+        // 1. Routes 컴포넌트 내부에는 Route 컴포넌트만 들어갈 수 있다.
+        // 2. Routes 컴포넌트 외부 요소는 모든 페이지에 전부 렌더링 된다. (Header, Footer)
+    );
 
-            }
+}
 
 export default App
