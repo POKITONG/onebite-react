@@ -6,6 +6,8 @@ import New from "./pages/New.jsx";
 import Diary from "./pages/Diary.jsx";
 import Notfound from "./pages/Notfound.jsx";
 import {getEmotionImage} from "./util/get-emotion-image.js";
+import Button from "./components/Button.jsx";
+import Header from "./components/Header.jsx";
 
 // 1. "/" : 모든 일기를 조회하는 Home 페이지
 // 2. "/new" : 새로운 일기를 작성하는 New 페이지
@@ -34,24 +36,18 @@ function App() {
 
     // Network : 리액트 앱이 주고받는 모든 네트워크 요청들을 모니터링하는 기능 제공
 
+    {/* Link : html 의 a 태그를 대체하는 컴포넌트
+                페이지 이동시 a 태그와 다르게 새로고침이 되지 않는다.*/
+    }
 
     return (
         <>
-            <div>
-                <img src={getEmotionImage(1)}/>
-                <img src={getEmotionImage(2)}/>
-                <img src={getEmotionImage(3)}/>
-                <img src={getEmotionImage(4)}/>
-                <img src={getEmotionImage(5)}/>
-            </div>
-            <div>
-                <Link to={"/"}>Home</Link>
-                <Link to={"/new"}>New</Link>
-                <Link to={"/diary"}>Diary</Link>
-                {/* Link : html 의 a 태그를 대체하는 컴포넌트
-                페이지 이동시 a 태그와 다르게 새로고침이 되지 않는다.*/}
-            </div>
-            <button onClick={onClickButton}>New 페이지로 이동</button>
+            <Header title={"Header"}
+                    leftChild={<Button text={"Left"}/>}
+                    rightChild={<Button text={"Right"}/>} />
+
+
+            <Button/>
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/new" element={<New/>}/>
@@ -59,11 +55,11 @@ function App() {
                 {/*/:id 를 통해 url 파라미터를 사용하는 경로임을 명시*/}
                 <Route path="*" element={<Notfound/>}/>
             </Routes>
-        </>
-        // 1. Routes 컴포넌트 내부에는 Route 컴포넌트만 들어갈 수 있다.
-        // 2. Routes 컴포넌트 외부 요소는 모든 페이지에 전부 렌더링 된다. (Header, Footer)
-    );
+            </>
+            // 1. Routes 컴포넌트 내부에는 Route 컴포넌트만 들어갈 수 있다.
+            // 2. Routes 컴포넌트 외부 요소는 모든 페이지에 전부 렌더링 된다. (Header, Footer)
+            );
 
-}
+            }
 
 export default App
